@@ -8,7 +8,7 @@
 
     </div>
 </div>
-<br/>
+<br />
 <h2 class="text-center">Lista de productos</h2>
 <table class="table table-striped">
     <thead>
@@ -22,7 +22,28 @@
         <tr *ngFor="let item of products">
             <td scope="row">{{ item.id }}</td>
             <td>{{ item.name }}</td>
-            <td></td>
+            <td>
+                <button type="button" class="btn btn-success" (click)="openEditproduct(content,item)">Editar Producto</button>
+                <button type="button" class="btn btn-danger" (click)="deleteProduct(item)">Eliminar Producto</button>
+            </td>
         </tr>
     </tbody>
 </table>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Actualizar producto</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group ">
+            <label for="nameProduct">Nombre del producto</label>
+            <input type="text" class="form-control" id="nameProduct" name="nameProduct" [(ngModel)]="productModal.name" required maxlength="80">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="saveEditProduct()">Guardar cambios en productos</button>
+    </div>
+</ng-template>
