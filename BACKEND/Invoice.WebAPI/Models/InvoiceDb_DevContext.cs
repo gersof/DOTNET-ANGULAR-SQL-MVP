@@ -20,14 +20,7 @@ namespace Invoice.WebAPI.Models
         public virtual DbSet<InvoiceDetail> InvoiceDetail { get; set; }
         public virtual DbSet<Product> Product { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=localhost,1433;Initial Catalog=InvoiceDb_Dev;Persist Security Info=False;User ID=sa;Password=Abc.123456;MultipleActiveResultSets=False;TrustServerCertificate=False;Connection Timeout=30;");
-            }
-        }
+    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

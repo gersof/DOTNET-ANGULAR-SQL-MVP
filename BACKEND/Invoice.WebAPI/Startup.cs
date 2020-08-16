@@ -34,7 +34,10 @@ namespace Invoice.WebAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Invoice API", Version = "v1" });
             });
 
-       
+            services.AddDbContext<InvoiceDb_DevContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("InvoiceDb"));
+            });
 
         }
 
