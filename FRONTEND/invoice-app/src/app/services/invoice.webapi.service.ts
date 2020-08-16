@@ -574,6 +574,62 @@ export class Client {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createFullInvoice(body: InvoiceDto | undefined): Observable<InvoiceDto> {
+        let url_ = this.baseUrl + "/api/Invoices/create-full-invoice";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json", 
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateFullInvoice(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateFullInvoice(<any>response_);
+                } catch (e) {
+                    return <Observable<InvoiceDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<InvoiceDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processCreateFullInvoice(response: HttpResponseBase): Observable<InvoiceDto> {
+        const status = response.status;
+        const responseBlob = 
+            response instanceof HttpResponse ? response.body : 
+            (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }};
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = InvoiceDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<InvoiceDto>(<any>null);
+    }
+
+    /**
      * @return Success
      */
     invoicesAll(): Observable<Invoice[]> {
@@ -1221,6 +1277,13 @@ export class Product implements IProduct {
         }
         return data; 
     }
+
+    clone(): Product {
+        const json = this.toJSON();
+        let result = new Product();
+        result.init(json);
+        return result;
+    }
 }
 
 export interface IProduct {
@@ -1276,6 +1339,13 @@ export class InvoiceDetail implements IInvoiceDetail {
         data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
         data["product"] = this.product ? this.product.toJSON() : <any>undefined;
         return data; 
+    }
+
+    clone(): InvoiceDetail {
+        const json = this.toJSON();
+        let result = new InvoiceDetail();
+        result.init(json);
+        return result;
     }
 }
 
@@ -1342,6 +1412,13 @@ export class Invoice implements IInvoice {
         }
         return data; 
     }
+
+    clone(): Invoice {
+        const json = this.toJSON();
+        let result = new Invoice();
+        result.init(json);
+        return result;
+    }
 }
 
 export interface IInvoice {
@@ -1407,6 +1484,13 @@ export class Employee implements IEmployee {
         data["invoice"] = this.invoice ? this.invoice.toJSON() : <any>undefined;
         return data; 
     }
+
+    clone(): Employee {
+        const json = this.toJSON();
+        let result = new Employee();
+        result.init(json);
+        return result;
+    }
 }
 
 export interface IEmployee {
@@ -1419,6 +1503,140 @@ export interface IEmployee {
     telephone?: string | undefined;
     address?: string | undefined;
     invoice?: Invoice;
+}
+
+export class InvoiceDetailDto implements IInvoiceDetailDto {
+    id?: number;
+    invoiceId?: number;
+    productId?: number;
+    productName?: string | undefined;
+    price?: number;
+    quantity?: number;
+
+    constructor(data?: IInvoiceDetailDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.invoiceId = _data["invoiceId"];
+            this.productId = _data["productId"];
+            this.productName = _data["productName"];
+            this.price = _data["price"];
+            this.quantity = _data["quantity"];
+        }
+    }
+
+    static fromJS(data: any): InvoiceDetailDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceDetailDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["invoiceId"] = this.invoiceId;
+        data["productId"] = this.productId;
+        data["productName"] = this.productName;
+        data["price"] = this.price;
+        data["quantity"] = this.quantity;
+        return data; 
+    }
+
+    clone(): InvoiceDetailDto {
+        const json = this.toJSON();
+        let result = new InvoiceDetailDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IInvoiceDetailDto {
+    id?: number;
+    invoiceId?: number;
+    productId?: number;
+    productName?: string | undefined;
+    price?: number;
+    quantity?: number;
+}
+
+export class InvoiceDto implements IInvoiceDto {
+    id?: number;
+    date?: Date;
+    employeeId?: number;
+    employeeName?: string | undefined;
+    clientName?: string | undefined;
+    invoiceDetail?: InvoiceDetailDto[] | undefined;
+
+    constructor(data?: IInvoiceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.employeeId = _data["employeeId"];
+            this.employeeName = _data["employeeName"];
+            this.clientName = _data["clientName"];
+            if (Array.isArray(_data["invoiceDetail"])) {
+                this.invoiceDetail = [] as any;
+                for (let item of _data["invoiceDetail"])
+                    this.invoiceDetail!.push(InvoiceDetailDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): InvoiceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new InvoiceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["employeeId"] = this.employeeId;
+        data["employeeName"] = this.employeeName;
+        data["clientName"] = this.clientName;
+        if (Array.isArray(this.invoiceDetail)) {
+            data["invoiceDetail"] = [];
+            for (let item of this.invoiceDetail)
+                data["invoiceDetail"].push(item.toJSON());
+        }
+        return data; 
+    }
+
+    clone(): InvoiceDto {
+        const json = this.toJSON();
+        let result = new InvoiceDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IInvoiceDto {
+    id?: number;
+    date?: Date;
+    employeeId?: number;
+    employeeName?: string | undefined;
+    clientName?: string | undefined;
+    invoiceDetail?: InvoiceDetailDto[] | undefined;
 }
 
 export class WeatherForecast implements IWeatherForecast {
@@ -1459,6 +1677,13 @@ export class WeatherForecast implements IWeatherForecast {
         data["temperatureF"] = this.temperatureF;
         data["summary"] = this.summary;
         return data; 
+    }
+
+    clone(): WeatherForecast {
+        const json = this.toJSON();
+        let result = new WeatherForecast();
+        result.init(json);
+        return result;
     }
 }
 

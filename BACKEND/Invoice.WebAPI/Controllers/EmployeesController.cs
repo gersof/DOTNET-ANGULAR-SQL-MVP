@@ -77,12 +77,12 @@ namespace Invoice.WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
+        public async Task<Employee> PostEmployee(Employee employee)
         {
             _context.Employee.Add(employee);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
+            return employee;
         }
 
         // DELETE: api/Employees/5

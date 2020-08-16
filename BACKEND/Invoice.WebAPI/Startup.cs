@@ -58,6 +58,11 @@ namespace Invoice.WebAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Invoice API V1");
             });
 
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            });
+
             app.UseRouting();
 
             app.UseAuthorization();

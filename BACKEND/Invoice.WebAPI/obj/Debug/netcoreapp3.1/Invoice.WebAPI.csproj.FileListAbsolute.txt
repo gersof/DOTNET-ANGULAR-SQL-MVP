@@ -222,3 +222,4 @@ E:\git_projects\DOTNET-ANGULAR-SQL-MVP\BACKEND\Invoice.WebAPI\bin\Debug\netcorea
 E:\git_projects\DOTNET-ANGULAR-SQL-MVP\BACKEND\Invoice.WebAPI\obj\Debug\netcoreapp3.1\Invoice.WebAPI.csproj.CoreCompileInputs.cache
 E:\git_projects\DOTNET-ANGULAR-SQL-MVP\BACKEND\Invoice.WebAPI\obj\Debug\netcoreapp3.1\Invoice.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 E:\git_projects\DOTNET-ANGULAR-SQL-MVP\BACKEND\Invoice.WebAPI\obj\Debug\netcoreapp3.1\Invoice.WebAPI.MvcApplicationPartsAssemblyInfo.cache
+E:\git_projects\DOTNET-ANGULAR-SQL-MVP\BACKEND\Invoice.WebAPI\obj\Debug\netcoreapp3.1\Invoice.WebAPI.csprojAssemblyReference.cache

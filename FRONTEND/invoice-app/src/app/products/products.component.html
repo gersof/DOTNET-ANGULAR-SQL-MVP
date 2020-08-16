@@ -23,7 +23,7 @@
             <td scope="row">{{ item.id }}</td>
             <td>{{ item.name }}</td>
             <td>
-                <button type="button" class="btn btn-success" (click)="openEditproduct(content,item)">Editar Producto</button>
+                <button type="button" class="btn btn-success" (click)="showEditProduct(item)">Editar Producto</button>
                 <button type="button" class="btn btn-danger" (click)="deleteProduct(item)">Eliminar Producto</button>
             </td>
         </tr>

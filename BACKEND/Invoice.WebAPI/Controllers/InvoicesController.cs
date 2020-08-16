@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Invoice.WebAPI.Models;
+using Invoice.WebAPI.Dtos;
 
 namespace Invoice.WebAPI.Controllers
 {
@@ -18,6 +19,43 @@ namespace Invoice.WebAPI.Controllers
         public InvoicesController(InvoiceDb_DevContext context)
         {
             _context = context;
+        }
+
+        [HttpPost("create-full-invoice")]
+        public async Task<InvoiceDto> CreateFullInvoice(InvoiceDto invoice)
+        {
+            var invoiceResult = new InvoiceDto();
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    var invoicetable = new Invoice.WebAPI.Models.Invoice();
+                    invoicetable.Date = invoice.Date;
+                    invoicetable.ClientName = invoice.ClientName;
+                    invoicetable.EmployeeId = invoice.EmployeeId;
+                    _context.Invoice.Add(invoicetable);
+                    _context.SaveChanges();
+
+                    foreach(var item in invoice.InvoiceDetail)
+                    {
+                        var detailInvoice = new InvoiceDetail();
+                        detailInvoice.InvoiceId = invoicetable.Id;
+                        detailInvoice.Price = item.Price;
+                        detailInvoice.ProductId = item.ProductId;
+                        detailInvoice.Quantity = item.Quantity;
+                        _context.InvoiceDetail.Add(detailInvoice);
+                    }
+                    _context.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    // TODO: Handle failure
+                }
+
+            }
+
+            return invoiceResult;
         }
 
         // GET: api/Invoices
