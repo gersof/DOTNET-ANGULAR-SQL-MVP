@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Nombre del producto</label>
+            <input type="text" class="form-control" id="nameProduct" name="nameProduct" [(ngModel)]="product.name" required maxlength="80">
+        </div>
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="saveProduct()">Guardar Producto</button>
+
+    </div>
+</div>
+<br/>
+<h2 class="text-center">Lista de productos</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of products">
+            <td scope="row">{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
