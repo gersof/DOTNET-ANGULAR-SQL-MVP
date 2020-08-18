@@ -1,0 +1,143 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Primer Nombre</label>
+            <input type="text" class="form-control" [(ngModel)]="employee.firstName" maxlength="80">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Segundo Nombre</label>
+            <input type="text" class="form-control" [(ngModel)]="employee.secondName" maxlength="80">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Primer Apellido</label>
+            <input type="text" class="form-control" [(ngModel)]="employee.firstLastName" maxlength="80">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Segundo Apellido</label>
+            <input type="text" class="form-control" [(ngModel)]="employee.secondLastName" maxlength="80">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Fecha Nacimiento</label>
+            <input type="date" class="form-control" [(ngModel)]="employee.birthday" maxlength="80">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Telefono</label>
+            <input type="text" class="form-control" [(ngModel)]="employee.telephone" maxlength="80">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Direccion</label>
+            <input type="text" class="form-control" [(ngModel)]="employee.address" maxlength="80">
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg btn-block" (click)="saveEmployee()">Guardar
+        Empleado</button>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Lista de Empleados</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Primer Nombre</th>
+                    <th scope="col">Segundo Nombre</th>
+                    <th scope="col">Primer Apllido</th>
+                    <th scope="col">Segundo Apellido</th>
+                    <th scope="col">Fecha Nacimiento</th>
+                    <th scope="col">Télefono</th>
+                    <th scope="col">Derección</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of employees">
+                    <td scope="row">{{ item.id }}</td>
+                    <td>{{ item.firstName }}</td>
+                    <td>{{ item.secondName }}</td>
+                    <td>{{ item.firstLastName }}</td>
+                    <td>{{ item.secondLastName }}</td>
+                    <td>{{ item.birthday | date: 'yyyy-MM-dd'}}</td>
+                    <td>{{ item.telephone }}</td>
+                    <td>{{ item.address }}</td>
+                    <td>
+                        <button type="button" class="btn btn-success" (click)="openEditEmployee(contentEmployeeModal,item)">Editar
+                            Empleado</button>
+                        <button type="button" class="btn btn-danger" (click)="deleteEmployee(item)">Eliminar
+                            Empleado</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #contentEmployeeModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Actualizar empleado</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Primer Nombre</label>
+                    <input type="text" class="form-control" [(ngModel)]="employeeModal.firstName" maxlength="80">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Segundo Nombre</label>
+                    <input type="text" class="form-control" [(ngModel)]="employeeModal.secondName" maxlength="80">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Primer Apellido</label>
+                    <input type="text" class="form-control" [(ngModel)]="employeeModal.firstLastName" maxlength="80">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Segundo Apellido</label>
+                    <input type="text" class="form-control" [(ngModel)]="employeeModal.secondLastName" maxlength="80">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Fecha Nacimiento</label>
+                    <input type="date" class="form-control" [(ngModel)]="employeeModal.birthday" maxlength="80">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Telefono</label>
+                    <input type="text" class="form-control" [(ngModel)]="employeeModal.telephone" maxlength="80">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="nameProduct">Direccion</label>
+                    <input type="text" class="form-control" [(ngModel)]="employeeModal.address" maxlength="80">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="saveEditEmployee()">Guardar cambios en employee</button>
+    </div>
+</ng-template>

@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Fecha Factura</label>
+            <input type="date" class="form-control" [(ngModel)]="invoice.date">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group ">
+            <label for="nameProduct">Nombre del cliente</label>
+            <input type="text" class="form-control" [(ngModel)]="invoice.clientName">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="nameProduct">Seleccione empleado</label>
+            <select class="form-control " [(ngModel)]="invoice.employeeId">
+                <option>Elija una opcion</option>
+                <option *ngFor="let item of employees" value="{{item.id}}">{{item.firstName}} {{item.secondName}}
+                    {{item.firstLastName}} {{item.secondLastName}} </option>
+            </select>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="saveInvoice()">Guardar
+            Factura</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Agregar productos</h3>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="">Seleccione un producto</label>
+            <select class="form-control " [(ngModel)]="detail.productId" (change)="productChange($event)">
+                <option>Elija una opcion</option>
+                <option *ngFor="let item of products" value="{{item.id}}">{{item.name}} </option>
+            </select>
+
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="">Precio producto</label>
+            <input type="number" class="form-control" [(ngModel)]="detail.price">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group ">
+            <label for="">Cantidad</label>
+            <input type="number" class="form-control" [(ngModel)]="detail.quantity">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <button type="button" class="btn btn-success" (click)="addDetailInvoice()">Agregar</button>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center">Detalle Factura</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of details">
+                    <td>{{ item.productName }}</td>
+                    <td>{{ item.price | currency }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price* item.quantity | currency }}</td>
+
+                    <td>
+                        <button type="button" class="btn btn-success" (click)="openEditDetailInvoice(contentDetailInvoiceModal,item)">Editar
+                            Detalle</button>
+                        <button type="button" class="btn btn-danger" (click)="deleteDetail(item)">Eliminar
+                            Detalle</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #contentDetailInvoiceModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Actualizar detalle factura</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group ">
+                    <label for="">Producto</label>
+                    <input type="text" [ngModel]="detailModal.productName" disabled/>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group ">
+                    <label for="">Precio producto</label>
+                    <input type="number" class="form-control" [(ngModel)]="detailModal.price">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group ">
+                    <label for="">Cantidad</label>
+                    <input type="number" class="form-control" [(ngModel)]="detailModal.quantity">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="updateDetails(detailModal)">Guardar cambios en detalle
+            factura</button>
+    </div>
+</ng-template>
